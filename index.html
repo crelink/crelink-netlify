@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRELINK - Accueil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        teal: '#28606C', orange: '#ED8364', dark: '#3F455C'
+                    },
+                    boxShadow: { 'highlight': '0 20px 50px -12px rgba(0,0,0,0.1)' }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white min-h-screen text-gray-700 flex flex-col items-center selection:bg-teal selection:text-white">
+
+    <header class="w-full max-w-6xl p-6 flex justify-start items-center">
+        <div class="text-teal font-heading font-bold text-2xl flex items-center gap-2">
+            <span>🪢</span> CRELINK
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center justify-center px-6 w-full max-w-5xl pb-20">
+        
+        <!-- En-tête épuré sur fond blanc -->
+        <div class="text-center max-w-2xl mb-16">
+            <h1 class="text-4xl md:text-5xl font-heading font-bold text-dark mb-6 leading-tight tracking-tight">
+                L'entraide au service de <br><span class="text-teal">l'École Montessori</span>
+            </h1>
+            <p class="text-lg text-gray-500 font-sans px-4">
+                Découvrez les besoins en création et rénovation de matériel, proposez votre aide ou gérez votre espace.
+            </p>
+        </div>
+
+        <!-- Les pavés mis en valeur -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+            
+            <!-- Espace Public (Mise en valeur Orange) -->
+            <div class="bg-orange/5 border border-orange/20 rounded-3xl p-10 shadow-highlight hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center transform hover:-translate-y-1">
+                <div class="w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center text-3xl mb-6">🤝</div>
+                <h2 class="text-2xl font-heading font-semibold text-dark mb-3">Espace Public</h2>
+                <p class="text-sm text-gray-600 mb-8 flex-grow">Consultez les appels à volontaires et proposez vos compétences créatives ou techniques.</p>
+                <button onclick="window.location.href='public.html'" class="w-full bg-orange hover:bg-[#d67254] text-white font-medium py-3.5 rounded-xl transition-colors shadow-md">
+                    Accéder à l'espace
+                </button>
+            </div>
+
+            <!-- Espace École (Mise en valeur Teal) -->
+            <div class="bg-teal/5 border border-teal/20 rounded-3xl p-10 shadow-highlight hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center transform hover:-translate-y-1">
+                <div class="w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center text-3xl mb-6">🔐</div>
+                <h2 class="text-2xl font-heading font-semibold text-dark mb-3">Espace École</h2>
+                <p class="text-sm text-gray-600 mb-8 flex-grow">Accès sécurisé réservé à l'équipe pédagogique et aux administrateurs du CRELAM.</p>
+                <button onclick="window.location.href='admin_auth.html'" class="w-full bg-teal hover:bg-[#1f4a54] text-white font-medium py-3.5 rounded-xl transition-colors shadow-md">
+                    Connexion sécurisée
+                </button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
