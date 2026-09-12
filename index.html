@@ -3,66 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRELINK - Accueil</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Poppins', 'sans-serif'] },
-                    colors: {
-                        teal: '#28606C', orange: '#ED8364', dark: '#3F455C'
-                    },
-                    boxShadow: { 'highlight': '0 20px 50px -12px rgba(0,0,0,0.1)' }
-                }
-            }
-        }
-    </script>
+    <title>CRELINK - Espace Volontaires</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f6; margin: 0; padding: 20px; color: #333; }
+        .header { background-color: #28606C; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px; border-left: 5px solid #6DCA8D; }
+        .card h3 { margin-top: 0; color: #28606C; }
+        .badge { background-color: #E8F4F6; color: #28606C; padding: 5px 10px; border-radius: 15px; font-size: 0.85em; margin-right: 5px; display: inline-block; margin-bottom: 10px;}
+        .btn { background-color: #28606C; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: 0.2s; }
+        .btn:hover { background-color: #1e4b54; }
+        .loader { text-align: center; padding: 20px; font-style: italic; color: #666; }
+    </style>
 </head>
-<body class="bg-white min-h-screen text-gray-700 flex flex-col items-center selection:bg-teal selection:text-white">
+<body>
 
-    <header class="w-full max-w-6xl p-6 flex justify-start items-center">
-        <div class="text-teal font-heading font-bold text-2xl flex items-center gap-2">
-            <span>🪢</span> CRELINK
-        </div>
-    </header>
+<div class="container">
+    <div class="header">
+        <h2>🤝 Espace Volontaires</h2>
+        <p>Besoins actuels de l'école</p>
+    </div>
 
-    <main class="flex-grow flex flex-col items-center justify-center px-6 w-full max-w-5xl pb-20">
-        
-        <!-- En-tête épuré sur fond blanc -->
-        <div class="text-center max-w-2xl mb-16">
-            <h1 class="text-4xl md:text-5xl font-heading font-bold text-dark mb-6 leading-tight tracking-tight">
-                L'entraide au service de <br><span class="text-teal">l'École Montessori</span>
-            </h1>
-            <p class="text-lg text-gray-500 font-sans px-4">
-                Découvrez les besoins en création et rénovation de matériel, proposez votre aide ou gérez votre espace.
-            </p>
-        </div>
+    <div id="demandes-container">
+        <div class="loader">Chargement des demandes en cours...</div>
+    </div>
+</div>
 
-        <!-- Les pavés mis en valeur -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+<script>
+    // Fonction pour récupérer les données depuis ton API Netlify
+    async function chargerDemandes() {
+        const container = document.getElementById('demandes-container');
+        try {
+            // Appel de la fonction invisible getDemandes.js
+            const response = await fetch('/.netlify/functions/getDemandes');
+            if (!response.ok) throw new Error('Erreur réseau');
             
-            <!-- Espace Public (Mise en valeur Orange) -->
-            <div class="bg-orange/5 border border-orange/20 rounded-3xl p-10 shadow-highlight hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center transform hover:-translate-y-1">
-                <div class="w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center text-3xl mb-6">🤝</div>
-                <h2 class="text-2xl font-heading font-semibold text-dark mb-3">Espace Public</h2>
-                <p class="text-sm text-gray-600 mb-8 flex-grow">Consultez les appels à volontaires et proposez vos compétences créatives ou techniques.</p>
-                <button onclick="window.location.href='public.html'" class="w-full bg-orange hover:bg-[#d67254] text-white font-medium py-3.5 rounded-xl transition-colors shadow-md">
-                    Accéder à l'espace
-                </button>
-            </div>
+            const demandes = await response.json();
+            container.innerHTML = ''; // Vide le message de chargement
 
-            <!-- Espace École (Mise en valeur Teal) -->
-            <div class="bg-teal/5 border border-teal/20 rounded-3xl p-10 shadow-highlight hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center transform hover:-translate-y-1">
-                <div class="w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center text-3xl mb-6">🔐</div>
-                <h2 class="text-2xl font-heading font-semibold text-dark mb-3">Espace École</h2>
-                <p class="text-sm text-gray-600 mb-8 flex-grow">Accès sécurisé réservé à l'équipe pédagogique et aux administrateurs du CRELAM.</p>
-                <button onclick="window.location.href='admin_auth.html'" class="w-full bg-teal hover:bg-[#1f4a54] text-white font-medium py-3.5 rounded-xl transition-colors shadow-md">
-                    Connexion sécurisée
-                </button>
-            </div>
-        </div>
-    </main>
+            if (demandes.length === 0) {
+                container.innerHTML = '<p style="text-align:center;">🎉 Aucune demande en attente pour le moment.</p>';
+                return;
+            }
+
+            // Génération des cartes HTML pour chaque ligne récupérée
+            demandes.forEach(demande => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>🧩 ${demande.materiel}</h3>
+                    <div class="badge">🏫 ${demande.ambiance}</div>
+                    <div class="badge">📍 ${demande.aire}</div>
+                    <p><strong>🎯 Objet du besoin :</strong> ${demande.impact || 'Non précisé'}</p>
+                    <button class="btn" onclick="proposerAide('${demande.id}')">🙋‍♂️ Je me propose</button>
+                `;
+                container.appendChild(card);
+            });
+
+        } catch (error) {
+            container.innerHTML = '<p style="color:red; text-align:center;">Erreur lors de la communication avec la base de données.</p>';
+            console.error("Erreur:", error);
+        }
+    }
+
+    // Fonction d'attente pour la soumission (sera développée ensuite)
+    function proposerAide(id) {
+        alert("Demande " + id + " sélectionnée.\\nL'intégration du code secret sera configurée à l'étape suivante.");
+    }
+
+    // Lance le chargement dès l'ouverture de la page
+    document.addEventListener('DOMContentLoaded', chargerDemandes);
+</script>
+
 </body>
 </html>
