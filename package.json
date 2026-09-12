@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/crelink/crelink-netlify#readme",
 "dependencies": {
+    "google-auth-library": "^9.0.0",
     "google-spreadsheet": "4.0.2",
     "nodemailer": "^6.9.0"
-  }
-}
+  }}
