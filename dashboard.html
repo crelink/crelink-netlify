@@ -44,11 +44,11 @@
             <button class="tab">📋 Modèles</button>
         </div>
 
-        <div class="content-box">
-            <h2>Bienvenue dans l'interface de gestion</h2>
-            <p>Le chargement des données (Demandes et Contacts) arrivera ici prochainement.</p>
-        </div>
-    </div>
+     <div class="content-box" id="main-content">
+    <h2>Tableau de suivi des demandes</h2>
+    <p id="loading-msg">🔄 Chargement des données depuis Google Sheets...</p>
+    <div id="table-container"></div>
+</div>
 
     <script>
         // Fonction de déconnexion calquée sur ton ancien views_admin.py
@@ -57,5 +57,47 @@
             window.location.href = '/admin.html';
         }
     </script>
+
+// Fonction pour récupérer et afficher les demandes
+async function chargerDemandes() {
+    try {
+        const response = await fetch('/.netlify/functions/getDemandes');
+        const data = await response.json();
+        
+        const container = document.getElementById('table-container');
+        const loading = document.getElementById('loading-msg');
+        
+        if (data.error) {
+            loading.innerHTML = `<span style="color:red">Erreur : ${data.error}</span>`;
+            return;
+        }
+
+        // On construit un tableau HTML simple
+        let html = `<table style="width:100%; text-align:left; border-collapse: collapse;">
+            <tr style="background-color: #28606C; color: white;">
+                <th style="padding: 10px;">ID</th>
+                <th style="padding: 10px;">Matériel</th>
+                <th style="padding: 10px;">Statut</th>
+            </tr>`;
+            
+        data.forEach(demande => {
+            html += `<tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">${demande['Identifiant'] || '-'}</td>
+                <td style="padding: 10px;"><strong>${demande['Nom du matériel'] || '-'}</strong></td>
+                <td style="padding: 10px;">${demande['Statut'] || '-'}</td>
+            </tr>`;
+        });
+        
+        html += `</table>`;
+        loading.style.display = 'none';
+        container.innerHTML = html;
+        
+    } catch (err) {
+        document.getElementById('loading-msg').innerText = "Erreur de connexion au serveur.";
+    }
+}
+
+// Lancement automatique au chargement de la page
+chargerDemandes();
 </body>
 </html>
