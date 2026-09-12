@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - CRELINK</title>
+    
+    <!-- 🛑 VERROU DE SÉCURITÉ -->
+    <script>
+        if (sessionStorage.getItem('admin_logged_in') !== 'true') {
+            // Si la personne n'a pas le "badge" virtuel, on la renvoie à la connexion
+            window.location.href = '/admin.html';
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f6; margin: 0; }
+        .header { background-color: #28606C; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 1.5rem; }
+        .btn-logout { background-color: #F99089; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-logout:hover { background-color: #d87670; }
+        
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+        .tab { padding: 10px 20px; background: #e0e0e0; border-radius: 5px; cursor: pointer; font-weight: bold; color: #333; border: none;}
+        .tab.active { background: #28606C; color: white; }
+        
+        .content-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🛠️ Espace École - CRELINK</h1>
+        <button class="btn-logout" onclick="logout()">Déconnexion 🔒</button>
+    </div>
+
+    <div class="container">
+        <!-- Tes 4 onglets historiques -->
+        <div class="tabs">
+            <button class="tab active">🗃️ Tableau de bord</button>
+            <button class="tab">👤 Annuaire</button>
+            <button class="tab">🔐 Accès</button>
+            <button class="tab">📋 Modèles</button>
+        </div>
+
+        <div class="content-box">
+            <h2>Bienvenue dans l'interface de gestion</h2>
+            <p>Le chargement des données (Demandes et Contacts) arrivera ici prochainement.</p>
+        </div>
+    </div>
+
+    <script>
+        // Fonction de déconnexion calquée sur ton ancien views_admin.py
+        function logout() {
+            sessionStorage.removeItem('admin_logged_in');
+            window.location.href = '/admin.html';
+        }
+    </script>
+</body>
+</html>

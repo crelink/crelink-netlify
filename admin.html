@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion École - CRELINK</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; border-top: 5px solid #28606C; }
+        h2 { color: #28606C; margin-top: 0; }
+        input { width: 90%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 5px; outline: none; }
+        .btn { background-color: #28606C; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.2s; }
+        .btn:hover { background-color: #1e4b54; }
+        #error-msg { color: #A61C3C; margin-top: 15px; font-size: 0.9em; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>🔐 Espace École</h2>
+        <p style="color: #666; font-size: 0.9em;">Veuillez vous identifier pour accéder au tableau de bord.</p>
+        
+        <input type="password" id="password" placeholder="Votre mot de passe" onkeydown="if(event.key === 'Enter') login()">
+        <button class="btn" onclick="login()">Se connecter</button>
+        
+        <p id="error-msg">Mot de passe incorrect.</p>
+    </div>
+
+    <script>
+        async function login() {
+            const pwd = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+            const btn = document.querySelector('.btn');
+            
+            errorMsg.style.display = 'none';
+            btn.innerText = 'Vérification...';
+
+            try {
+                // Appel de ton API sécurisée
+                const response = await fetch('/.netlify/functions/verifyAdmin', {
+                    method: 'POST',
+                    body: JSON.stringify({ password: pwd })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    // C'est le bon mot de passe !
+                    btn.innerText = 'Accès autorisé !';
+                    btn.style.backgroundColor = '#6DCA8D';
+                    // On enregistre la session dans le navigateur
+                    sessionStorage.setItem('admin_logged_in', 'true');
+                    // On redirige vers le futur tableau de bord
+                    window.location.href = '/dashboard.html'; 
+                } else {
+                    // Mauvais mot de passe
+                    errorMsg.style.display = 'block';
+                    btn.innerText = 'Se connecter';
+                }
+            } catch (err) {
+                errorMsg.innerText = "Erreur de connexion au serveur.";
+                errorMsg.style.display = 'block';
+                btn.innerText = 'Se connecter';
+            }
+        }
+    </script>
+</body>
+</html>
